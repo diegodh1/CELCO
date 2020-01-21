@@ -1,3 +1,8 @@
+"""
+nombre:userLogin
+params:el usuario user, la contrasena password, la conexiona la base de datos conn
+return: retorna el id del usuario que se logueo o en caso de un error de conexion imprime un mensaje de error
+"""
 def userLogin(user,password,conn):
     try:
         with conn.cursor() as cursor:
