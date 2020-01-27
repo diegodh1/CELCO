@@ -14,7 +14,7 @@ def getRutas(conn):
             rows = cursor.fetchall()
             rutas=[]
             for row in rows:
-                obj={"folder":row.Ruta_Arc_Tipo,"path":row.Ruta_Arc_Ruta}
+                obj={"nombre":row.Ruta_Arc_Tipo,"ruta":row.Ruta_Arc_Ruta}
                 rutas.append(obj)
             return rutas
     except Exception as e:

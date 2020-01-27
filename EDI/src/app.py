@@ -3,9 +3,10 @@ from users import users
 from controllers.login import userLogin
 from controllers.connection import conn
 from controllers.fileHandler import getRutas,getFilesFromPath,getFile64bits
+from flask_cors import CORS
 
 app=Flask(__name__)
-
+CORS(app)
 """ Nombre: login
     Tipo de peticion:POST
     descripcion: recibe en la peticion un usuario y una contrasena la cual se verifica en la base de datos que
@@ -15,18 +16,19 @@ app=Flask(__name__)
 
 @app.route('/login',methods=['POST'])
 def login():
-    user=request.form['user']
-    password=request.form['password']
+    content=request.get_json()
+    user=content['user']
+    password=content['password']
     userId= userLogin(user,password,conn)
     if userId =="":
         return {
             "userId":"",
-            "message":"Problemas al iniciar sección"
+            "message":"usuario y/o contraseña incorrectos"
         }
     else:
         return {
             "userId":userId,
-            "message":"Bienvenido "+user
+            "message":"Ingreso Realizado"
         }
 
 """ Nombre: getServerRoutes
@@ -48,9 +50,13 @@ def getServerRoutes():
 """
 @app.route('/getFiles',methods=['POST'])
 def getFiles():
-    path=request.form['path']
-    dir=getFilesFromPath(path)
-    return jsonify({"directory":dir})
+    content=request.get_json()
+    path=content['path']
+    dire=getFilesFromPath(path)
+    return jsonify({
+        "directory":dire,
+        "message":"status 200, ok"
+        })
 
 """ Nombre: getb64bits
     Tipo de peticion:POST

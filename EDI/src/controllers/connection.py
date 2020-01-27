@@ -3,7 +3,7 @@
     CRUD evitando inyecciones SQL
 """
 import pyodbc
-server = '192.168.1.7'
+server = 'localhost'
 db_name = 'siprocava'
 user = 'sa'
 password = 'Cristiano1994'
