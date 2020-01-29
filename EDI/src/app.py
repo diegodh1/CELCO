@@ -66,7 +66,8 @@ def getFiles():
 """
 @app.route('/getb64bits',methods=['POST'])
 def getb64bits():
-    path=request.form['path']
+    content=request.get_json()
+    path=content['path']
     b64=getFile64bits(path)
     return b64
 
