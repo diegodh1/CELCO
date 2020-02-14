@@ -44,7 +44,7 @@ def getFilesFromPath(ruta):
         else:
             obj={"nombre":path,"extension":"none","ruta":full_path.replace("\\","/"),"tipo":"folder"}
             files.append(obj)
-    return print(files)
+    return files
 
 """
 nombre: getFile64bits
