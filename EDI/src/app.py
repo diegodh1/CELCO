@@ -2,7 +2,7 @@ from flask import Flask,jsonify,request
 from users import users
 from controllers.login import userLogin
 from controllers.connection import conn
-from controllers.fileHandler import getRutas,getFilesFromPath,getFile64bits
+from controllers.fileHandler import getRutas,getFilesFromPath,getFile64bits,saveImage
 from flask_cors import CORS
 
 app=Flask(__name__)
@@ -70,6 +70,14 @@ def getb64bits():
     path=content['path']
     b64=getFile64bits(path)
     return b64
+
+@app.route('/uploadFile',methods=['POST'])
+def uploadFile():
+    content=request.get_json()
+    data=content['image']
+    path=content['path']
+    name=content['name']
+    return saveImage(data, path,name)
 
 
 #inicializamos el servidor el cual escucha en el puerto 4000 y se reinicia cada vez q hayan cambios

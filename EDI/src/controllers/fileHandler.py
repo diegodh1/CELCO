@@ -1,6 +1,6 @@
 import os
 import base64
-
+from PIL import Image
 """
 nombre: getRutas
 params: una conexion a la base de datos
@@ -44,7 +44,7 @@ def getFilesFromPath(ruta):
         else:
             obj={"nombre":path,"extension":"none","ruta":full_path.replace("\\","/"),"tipo":"folder"}
             files.append(obj)
-    return files
+    return print(files)
 
 """
 nombre: getFile64bits
@@ -55,3 +55,19 @@ def getFile64bits(filePath):
     with open(filePath, "rb") as f:
         encoded_string = base64.b64encode(f.read())
         return encoded_string
+"""
+nombre: saveImage
+params: una ruta o path, imagen en 64bits
+return: mensaje indicando que se guardó o no
+"""
+def saveImage(data,path,name):
+    try:
+        imgdata = base64.b64decode(data)
+        with open(os.path.join(path,name), "wb") as f:
+            f.write(imgdata)
+            f.close()
+        
+        return "Archivo Almacenado"
+    except Exception as e:
+        return  str(e)
+    
