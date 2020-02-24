@@ -2,6 +2,7 @@ from flask import Flask,jsonify,request
 from users import users
 from controllers.login import userLogin
 from controllers.connection import conn
+from controllers.componenteItem import getItemsOt,getComponentesItem,saveComponenteSubItem,getComponentesSubItem
 from controllers.fileHandler import getRutas,getFilesFromPath,getFile64bits,saveImage
 from flask_cors import CORS
 
@@ -70,7 +71,11 @@ def getb64bits():
     path=content['path']
     b64=getFile64bits(path)
     return b64
-
+""" Nombre: uploadFile
+    Tipo de peticion:POST
+    descripcion: recibe una peticion post la cual tiene como parametro una imagen de 64 bits, un path y un nombre
+    return: retorna un mensaje el cual indica si la operacion se realizo o no exitosamente
+"""
 @app.route('/uploadFile',methods=['POST'])
 def uploadFile():
     content=request.get_json()
@@ -79,6 +84,59 @@ def uploadFile():
     name=content['name']
     return saveImage(data, path,name)
 
+""" Nombre: getItems
+    Tipo de peticion:POST
+    descripcion: recibe una peticion post la cual tiene como parametro el numero de la OT
+    return: retorna un json con los items de la OT y un mensaje de error o exito al realizar la operacion
+"""
+@app.route('/getItems',methods=['POST'])
+def getItems():
+    content=request.get_json()
+    ot=content['ot']
+    user=content['user']
+    retult = getItemsOt(ot,user, conn)
+    return jsonify(retult)
+
+""" Nombre: getComponentes
+    Tipo de peticion:POST
+    descripcion: recibe una peticion post la cual tiene como parametro el numero de la OT, el item, el nro: consecutivo cantidad
+    return: retorna un json con los componentes del Item y un mensaje de error o exito al realizar la operacion
+"""
+@app.route('/getComponentes',methods=['POST'])
+def getComponentes():
+    content=request.get_json()
+    ot=content['ot']
+    item=content['item']
+    nro=content['nro']
+    retult = getComponentesItem(item,nro,ot, conn)
+    return jsonify(retult)
+
+""" Nombre: saveComponente
+    Tipo de peticion:POST
+    descripcion: recibe una peticion post la cual tiene como parametro el id del sub_item, el id del componente, el usuario y si es requerido o no el material
+    return: retorna un json el cual contiene un mensaje de error o exito al realizar la operacion
+"""
+@app.route('/saveComponente',methods=['POST'])
+def saveComponente():
+    content=request.get_json()
+    id_sub_item=content['id_sub_item']
+    componente=content['id_componente']
+    user=content['id_usuario']
+    requerida=content['requerida']
+    retult = saveComponenteSubItem(id_sub_item,componente,user, requerida,conn)
+    return jsonify(retult)
+
+""" Nombre: getCompteSubItem
+    Tipo de peticion:POST
+    descripcion: recibe una peticion post la cual tiene como parametro el id del sub_item
+    return: retorna un json con los componentes del sub_item y un mensaje de error o exito al realizar la operacion
+"""
+@app.route('/getCompteSubItem',methods=['POST'])
+def getCompteSubItem():
+    content=request.get_json()
+    id_sub_item=content['id_sub_item']
+    retult = getComponentesSubItem(id_sub_item, conn)
+    return jsonify(retult)
 
 #inicializamos el servidor el cual escucha en el puerto 4000 y se reinicia cada vez q hayan cambios
 if __name__=='__main__':

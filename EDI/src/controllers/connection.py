@@ -3,10 +3,10 @@
     CRUD evitando inyecciones SQL
 """
 import pyodbc
-server = '192.168.1.7'
+server = '192.168.0.21'
 db_name = 'siprocava'
 user = 'sa'
-password = 'Cristiano1994'
+password = 'Celco2019('
 try:
     conn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=' +
                               server+';DATABASE='+db_name+';UID='+user+';PWD=' + password)
