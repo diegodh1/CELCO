@@ -2,7 +2,7 @@ from flask import Flask,jsonify,request
 from users import users
 from controllers.login import userLogin
 from controllers.connection import conn
-from controllers.componenteItem import getItemsOt,getComponentesItem,saveComponenteSubItem,getComponentesSubItem
+from controllers.componenteItem import searchOt,getItemsOt,getComponentesItem,saveComponenteSubItem,getComponentesSubItem
 from controllers.fileHandler import getRutas,getFilesFromPath,getFile64bits,saveImage
 from flask_cors import CORS
 
@@ -123,8 +123,11 @@ def saveComponente():
     componente=content['id_componente']
     user=content['id_usuario']
     requerida=content['requerida']
-    retult = saveComponenteSubItem(id_sub_item,componente,user, requerida,conn)
-    return jsonify(retult)
+    item=content['item']
+    nro=content['nro']
+    ot=content['ot']
+    result = saveComponenteSubItem(id_sub_item,componente,user, requerida,item,nro,ot,conn)
+    return jsonify(result)
 
 """ Nombre: getCompteSubItem
     Tipo de peticion:POST
@@ -136,6 +139,18 @@ def getCompteSubItem():
     content=request.get_json()
     id_sub_item=content['id_sub_item']
     retult = getComponentesSubItem(id_sub_item, conn)
+    return jsonify(retult)
+
+""" Nombre: search_ot
+    Tipo de peticion:POST
+    descripcion: recibe una peticion post la cual tiene como parametro el id de la OT
+    return: retorna un json con el encabezado de la de la remision
+"""
+@app.route('/search_ot',methods=['POST'])
+def search_ot():
+    content=request.get_json()
+    ot_id = content['ot']
+    retult = searchOt(ot_id, conn)
     return jsonify(retult)
 
 #inicializamos el servidor el cual escucha en el puerto 4000 y se reinicia cada vez q hayan cambios
