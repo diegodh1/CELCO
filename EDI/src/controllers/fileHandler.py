@@ -44,6 +44,7 @@ def getFilesFromPath(ruta):
         else:
             obj={"nombre":path,"extension":"none","ruta":full_path.replace("\\","/"),"tipo":"folder"}
             files.append(obj)
+    files.sort(key=lambda x: x["nombre"],reverse = True)
     return files
 
 """

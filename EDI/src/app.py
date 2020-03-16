@@ -2,7 +2,7 @@ from flask import Flask,jsonify,request
 from users import users
 from controllers.login import userLogin
 from controllers.connection import conn
-from controllers.componenteItem import searchOt,getItemsOt,getComponentesItem,saveComponenteSubItem,getComponentesSubItem
+from controllers.componenteItem import getRemision,searchOt,getItemsOt,getComponentesItem,saveComponenteSubItem,getComponentesSubItem
 from controllers.fileHandler import getRutas,getFilesFromPath,getFile64bits,saveImage
 from flask_cors import CORS
 
@@ -108,7 +108,8 @@ def getComponentes():
     ot=content['ot']
     item=content['item']
     nro=content['nro']
-    retult = getComponentesItem(item,nro,ot, conn)
+    id_sub_item=content['id_sub_item']
+    retult = getComponentesItem(item,nro,ot,id_sub_item,conn)
     return jsonify(retult)
 
 """ Nombre: saveComponente
@@ -123,10 +124,12 @@ def saveComponente():
     componente=content['id_componente']
     user=content['id_usuario']
     requerida=content['requerida']
+    compte_cant=content['compte_cant']
+    compte_obs=content['compte_obs']
     item=content['item']
     nro=content['nro']
     ot=content['ot']
-    result = saveComponenteSubItem(id_sub_item,componente,user, requerida,item,nro,ot,conn)
+    result = saveComponenteSubItem(id_sub_item,componente,user, requerida, compte_cant, compte_obs,item,nro,ot,conn)
     return jsonify(result)
 
 """ Nombre: getCompteSubItem
@@ -152,6 +155,14 @@ def search_ot():
     ot_id = content['ot']
     retult = searchOt(ot_id, conn)
     return jsonify(retult)
+
+@app.route('/get_remision',methods=['POST'])
+def get_remision():
+    content=request.get_json()
+    id_rem = content['id_rem']
+    retult = getRemision(id_rem, conn)
+    return jsonify(retult)
+
 
 #inicializamos el servidor el cual escucha en el puerto 4000 y se reinicia cada vez q hayan cambios
 if __name__=='__main__':
